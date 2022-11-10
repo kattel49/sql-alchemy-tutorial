@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, or_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative  import declarative_base
 
@@ -33,6 +33,34 @@ class Student(Base):
 Base.metadata.create_all(engine)
 
 s1 = Student(name="Shubhushan", age=22, grade="Bachelor")
-session.add(s1)
+s2 = Student(name="Shambhu", age=22, grade="tenth")
+s3 = Student(name="aabhushan", age=15, grade="tenth")
+
+session.add_all([s1, s2, s3])
 
 session.commit()
+
+
+def print_students(db_obj):
+    for student in db_obj:
+        print(f"{student.name}, {student.age}")
+
+#all data of in the students table
+students = session.query(Student)
+print_students(students)
+
+#order the rows according to name
+print("Ordered Data:")
+students = session.query(Student).order_by(Student.name)
+print_students(students)
+
+#filter data
+student = session.query(Student).filter(Student.name=="aabhushan").first()
+print("Filtered Data:")
+print(student.name)
+students = session.query(Student).filter(or_(Student.name=="aabhushan", Student.name=="Shambhu"))
+print_students(students)
+
+#total count of rows in the table
+students = session.query(Student).count()
+print(students)

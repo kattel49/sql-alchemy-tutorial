@@ -12,9 +12,10 @@ host = os.getenv('DB_HOST')
 port = os.getenv('DB_PORT')
 user = os.getenv('DB_USER')
 pwd = os.getenv('DB_PASSWORD')
+db = os.getenv('DB_DATABASE')
 
 # connect to the database engine
-engine = create_engine(f'postgresql://{user}:{pwd}@{host}:{port}/postgres', echo=False)
+engine = create_engine(f'postgresql://{user}:{pwd}@{host}:{port}/{db}', echo=False)
 # bind session to the engine
 Session = sessionmaker(bind=engine)
 session = Session()

@@ -30,8 +30,10 @@ class Student(Base):
     age = Column(Integer)
     grade = Column(String(50))
 
+#Create the table
 Base.metadata.create_all(engine)
 
+"""Adding data to a table in the database"""
 s1 = Student(name="Shubhushan", age=22, grade="Bachelor")
 s2 = Student(name="Shambhu", age=22, grade="tenth")
 s3 = Student(name="aabhushan", age=15, grade="tenth")
@@ -39,12 +41,12 @@ s3 = Student(name="aabhushan", age=15, grade="tenth")
 session.add_all([s1, s2, s3])
 
 session.commit()
-
+session.close()
 
 def print_students(db_obj):
     for student in db_obj:
         print(f"{student.name}, {student.age}")
-
+"""Fetching values from the database"""
 #all data of in the students table
 students = session.query(Student)
 print_students(students)
@@ -64,3 +66,14 @@ print_students(students)
 #total count of rows in the table
 students = session.query(Student).count()
 print(students)
+
+"""Updating the values in the database"""
+student = session.query(Student).filter(Student.name=="Shambhu").first()
+student.name = "shambhu"
+student.age = 23
+session.commit()
+
+"""Delete data in the database"""
+student = session.query(Student).filter(Student.name == "shambhu").first()
+session.delete(student)
+session.commit()
